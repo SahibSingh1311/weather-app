@@ -30,7 +30,7 @@ class WeatherViewModel : ViewModel() {
                 Log.d("Coroutine", "API call completed")
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        Log.d("Coroutine", "Response body is not null, updating LiveData")
+                        Log.d("Coroutine", "Response Successful: ${response.body()}")
                         // Assuming WeatherModel can be constructed from the response data
                         _weatherResult.value = NetworkResponse.Success(it)
                         Log.d("weather result", "getData: ${_weatherResult.value}")
@@ -39,10 +39,11 @@ class WeatherViewModel : ViewModel() {
                         _weatherResult.value = NetworkResponse.Error("Failed to Load Data: Empty Response Body")
                     }
                 } else {
-                    Log.d("Coroutine", "Response not Successfull, setting Error state")
+                    Log.d("Coroutine", "Response Error: ${response.message()}")
                     _weatherResult.value = NetworkResponse.Error("Failed to Load Data")
                 }
             } catch (e: Exception) {
+                Log.d("Coroutine", "Exception: ${e.message}")
                 _weatherResult.value = NetworkResponse.Error("Failed to Load Data")
             }
             Log.d("Coroutine", "Coroutine Ended")

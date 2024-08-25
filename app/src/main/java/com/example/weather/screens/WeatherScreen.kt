@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -26,50 +27,24 @@ fun WeatherScreen(
     location: Location
 ){
 
-//    weatherViewModel.getData(longitude = location.longitude, latitude = location.latitude)
-
-//    val weatherResult = weatherViewModel.weatherResult.observeAsState()
-
-//
-//
-//    Column(modifier = Modifier
-//        .fillMaxWidth()
-//        .padding(8.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally){
-//        Text(text = "Current Location")
-//        Text(text = "${location.latitude} and ${location.longitude}")
-//    }
-
-//    when(val result = weatherResult.value){
-//        is NetworkResponse.Error -> {
-//            Text(text = result.message)
-//        }
-//        NetworkResponse.Loading -> {
-//            Log.d("Live Data Observer", "WeatherScreen: Loading triggered.")
-////            CircularProgressIndicator(modifier = Modifier.height(40.dp))
-//        }
-//        is NetworkResponse.Success -> {
-//            Log.d("Live Data Observer", "WeatherScreen: Success")
-//            Text(text = result.data.toString())
-//        }
-//        null -> {}
-//        }
     val weatherResult by weatherViewModel.weatherResult.observeAsState(NetworkResponse.Loading)
+
+    // Call getData only once
+    LaunchedEffect(location) {
+        weatherViewModel.getData(location.longitude, location.latitude)
+    }
 
     when (weatherResult) {
         is NetworkResponse.Loading -> {
-            // Show a loading indicator
-            CircularProgressIndicator()
+            CircularProgressIndicator()  // Show loading indicator
         }
         is NetworkResponse.Success -> {
             val weatherData = (weatherResult as NetworkResponse.Success).data
-            // Display weather data
-            WeatherContent(weatherData)
+            WeatherContent(weatherData)  // Display the weather data
         }
         is NetworkResponse.Error -> {
             val errorMessage = (weatherResult as NetworkResponse.Error).message
-            // Show an error message
-            Text(text = "Error: $errorMessage")
+            Text(text = "Error: $errorMessage")  // Show error message
         }
     }
 }

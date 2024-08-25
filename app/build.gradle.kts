@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -77,4 +78,8 @@ dependencies {
 
     //Run-Time Live Data
     implementation(libs.androidx.runtime.livedata)
+
+    //Room DB
+    implementation (libs.androidx.room.runtime)
+    kapt (libs.androidx.room.compiler)
 }
