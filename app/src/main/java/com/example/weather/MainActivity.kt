@@ -25,8 +25,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // Retrieve the location data from the intent
-        val latitude = intent.getDoubleExtra("latitude", 0.0)
-        val longitude = intent.getDoubleExtra("longitude", 0.0)
+        val latitude = intent.getStringExtra("latitude")
+        val longitude = intent.getStringExtra("longitude")
 
         weatherDao = WeatherDatabase.getDatabase(application).weatherDao()
         weatherViewModel = ViewModelProvider(this, WeatherViewModelFactory(application,weatherDao))[WeatherViewModel::class.java]
@@ -35,8 +35,8 @@ class MainActivity : ComponentActivity() {
             WeatherTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     WeatherScreen(weatherViewModel, location = Location("").apply {
-                        this.latitude = latitude
-                        this.longitude = longitude
+                        this.latitude = latitude!!.toDouble()
+                        this.longitude = longitude!!.toDouble()
                     })
                 }
             }

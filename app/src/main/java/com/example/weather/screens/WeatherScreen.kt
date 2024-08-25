@@ -47,6 +47,8 @@ fun WeatherContent(weatherData: WeatherModel) {
     Column {
         Text(text = "Temperature: ${weatherData.main?.temp}°C")
         Text(text = "Name: ${weatherData.name}")
+        Text(text = "Longitude: ${weatherData.coOrd?.lon}")
+        Text(text = "Latitude: ${weatherData.coOrd?.lat}")
         // Add more weather details as needed
     }
 }

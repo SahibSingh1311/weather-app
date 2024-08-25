@@ -35,26 +35,26 @@ class WeatherViewModel(application: Application, private val weatherDao: Weather
                 if (response.isSuccessful) {
                     response.body()?.let { weatherModel ->
                         val weatherEntity = WeatherEntity(
-                            lon = weatherModel.coOrd?.lon?.toDouble(),
-                            lat = weatherModel.coOrd?.lat?.toDouble(),
-                            temp = weatherModel.main?.temp?.toDoubleOrNull(),
-                            feelsLike = weatherModel.main?.feelsLike?.toDoubleOrNull(),
-                            tempMin = weatherModel.main?.tempMin?.toDoubleOrNull(),
-                            tempMax = weatherModel.main?.tempMax?.toDoubleOrNull(),
-                            pressure = weatherModel.main?.pressure?.toIntOrNull(),
-                            humidity = weatherModel.main?.humidity?.toIntOrNull(),
-                            windSpeed = weatherModel.wind?.speed?.toDoubleOrNull(),
-                            windDeg = weatherModel.wind?.deg?.toIntOrNull(),
-                            windGust = weatherModel.wind?.gust?.toDoubleOrNull(),
-                            cloudsAll = weatherModel.clouds?.all?.toIntOrNull(),
+                            lon = weatherModel.coOrd?.lon,
+                            lat = weatherModel.coOrd?.lat,
+                            temp = weatherModel.main?.temp,
+                            feelsLike = weatherModel.main?.feelsLike,
+                            tempMin = weatherModel.main?.tempMin,
+                            tempMax = weatherModel.main?.tempMax,
+                            pressure = weatherModel.main?.pressure,
+                            humidity = weatherModel.main?.humidity,
+                            windSpeed = weatherModel.wind?.speed,
+                            windDeg = weatherModel.wind?.deg,
+                            windGust = weatherModel.wind?.gust,
+                            cloudsAll = weatherModel.clouds?.all,
                             weatherMain = weatherModel.weather.firstOrNull()?.main,
                             weatherDescription = weatherModel.weather.firstOrNull()?.description,
                             weatherIcon = weatherModel.weather.firstOrNull()?.icon,
                             name = weatherModel.name,
                             country = weatherModel.sys?.country,
-                            sunrise = weatherModel.sys?.sunrise?.toLongOrNull(),
-                            sunset = weatherModel.sys?.sunset?.toLongOrNull(),
-                            dt = weatherModel.dt?.toLongOrNull()
+                            sunrise = weatherModel.sys?.sunrise,
+                            sunset = weatherModel.sys?.sunset,
+                            dt = weatherModel.dt
                         )
 
                         weatherDao.insertWeather(weatherEntity)
@@ -81,19 +81,19 @@ class WeatherViewModel(application: Application, private val weatherDao: Weather
             val weatherModel = WeatherModel(
                 coOrd = CoOrd(lon = cachedWeather.lon.toString(), lat = cachedWeather.lat.toString()),
                 main = Main(
-                    temp = cachedWeather.temp?.toString(),
-                    feelsLike = cachedWeather.feelsLike?.toString(),
-                    tempMin = cachedWeather.tempMin?.toString(),
-                    tempMax = cachedWeather.tempMax?.toString(),
-                    pressure = cachedWeather.pressure?.toString(),
-                    humidity = cachedWeather.humidity?.toString()
+                    temp = cachedWeather.temp,
+                    feelsLike = cachedWeather.feelsLike,
+                    tempMin = cachedWeather.tempMin,
+                    tempMax = cachedWeather.tempMax,
+                    pressure = cachedWeather.pressure,
+                    humidity = cachedWeather.humidity
                 ),
                 wind = Wind(
-                    speed = cachedWeather.windSpeed?.toString(),
-                    deg = cachedWeather.windDeg?.toString(),
-                    gust = cachedWeather.windGust?.toString()
+                    speed = cachedWeather.windSpeed,
+                    deg = cachedWeather.windDeg,
+                    gust = cachedWeather.windGust
                 ),
-                clouds = Clouds(all = cachedWeather.cloudsAll?.toString()),
+                clouds = Clouds(all = cachedWeather.cloudsAll),
                 weather = arrayListOf(
                     Weather(
                     main = cachedWeather.weatherMain,
@@ -104,10 +104,10 @@ class WeatherViewModel(application: Application, private val weatherDao: Weather
                 name = cachedWeather.name,
                 sys = Sys(
                     country = cachedWeather.country,
-                    sunrise = cachedWeather.sunrise?.toString(),
-                    sunset = cachedWeather.sunset?.toString()
+                    sunrise = cachedWeather.sunrise,
+                    sunset = cachedWeather.sunset
                 ),
-                dt = cachedWeather.dt?.toString()
+                dt = cachedWeather.dt
             )
             _weatherResult.postValue(NetworkResponse.Success(weatherModel))
         } else {

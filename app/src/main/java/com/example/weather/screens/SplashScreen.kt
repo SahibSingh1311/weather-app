@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.weather.MainActivity
 import com.example.weather.api.NetworkResponse
+import com.example.weather.api.WeatherModel
 import com.example.weather.viewmodel.WeatherViewModelFactory
 import com.example.weather.api.local.data.WeatherDatabase
 import com.example.weather.viewmodel.WeatherViewModel
@@ -104,7 +105,7 @@ private fun fetchLocationAndWeather() {
             when (result) {
                 is NetworkResponse.Success -> {
                     // Weather data is ready, transition to MainActivity
-                    startMainActivity()
+                    startMainActivity(result)
                 }
                 is NetworkResponse.Error -> {
                     Toast.makeText(this, "Failed to fetch weather data: ${result.message}", Toast.LENGTH_LONG).show()
@@ -120,8 +121,10 @@ private fun fetchLocationAndWeather() {
         finish()
     }
 }
-private fun startMainActivity() {
+private fun startMainActivity(result: NetworkResponse.Success<WeatherModel>) {
     val intent = Intent(this, MainActivity::class.java)
+    intent.putExtra("longitude", result.data.coOrd?.lon)
+    intent.putExtra("latitude", result.data.coOrd?.lat)
     startActivity(intent)
     finish()  // Close splash screen activity
 }
