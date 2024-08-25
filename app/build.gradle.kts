@@ -81,5 +81,6 @@ dependencies {
 
     //Room DB
     implementation (libs.androidx.room.runtime)
-    kapt (libs.androidx.room.compiler)
+    implementation (libs.androidx.room.ktx)
+    kapt (libs.androidx.room.compiler.v250)
 }

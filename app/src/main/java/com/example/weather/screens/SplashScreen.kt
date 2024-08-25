@@ -3,7 +3,6 @@ package com.example.weather.screens
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.widget.Toast
@@ -19,16 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.weather.MainActivity
 import com.example.weather.api.NetworkResponse
+import com.example.weather.viewmodel.WeatherViewModelFactory
+import com.example.weather.api.local.data.WeatherDatabase
 import com.example.weather.viewmodel.WeatherViewModel
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import kotlinx.coroutines.launch
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreen : ComponentActivity() {
@@ -40,7 +40,9 @@ class SplashScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        weatherViewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
+        val weatherDao = WeatherDatabase.getDatabase(application).weatherDao()
+
+        weatherViewModel = ViewModelProvider(this, WeatherViewModelFactory(application,weatherDao))[WeatherViewModel::class.java]
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -91,7 +93,9 @@ private fun fetchLocationAndWeather() {
                 weatherViewModel.getData(location.longitude, location.latitude)
             } else {
                 Toast.makeText(this, "Failed to get location", Toast.LENGTH_LONG).show()
-                finish()  // Handle failure
+                lifecycleScope.launch {
+                    weatherViewModel.loadCachedData()
+                }
             }
         }
 
