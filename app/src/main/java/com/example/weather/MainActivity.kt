@@ -1,9 +1,11 @@
 package com.example.weather
 
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
@@ -21,6 +23,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var weatherDao: WeatherDao
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,7 +32,10 @@ class MainActivity : ComponentActivity() {
         val longitude = intent.getStringExtra("longitude")
 
         weatherDao = WeatherDatabase.getDatabase(application).weatherDao()
-        weatherViewModel = ViewModelProvider(this, WeatherViewModelFactory(application,weatherDao))[WeatherViewModel::class.java]
+        weatherViewModel = ViewModelProvider(
+            this,
+            WeatherViewModelFactory(application, weatherDao)
+        )[WeatherViewModel::class.java]
 
         setContent {
             WeatherTheme {

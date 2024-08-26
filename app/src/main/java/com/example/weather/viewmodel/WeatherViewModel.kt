@@ -18,7 +18,8 @@ import com.example.weather.api.local.data.WeatherDao
 import com.example.weather.api.local.data.WeatherEntity
 import kotlinx.coroutines.launch
 
-class WeatherViewModel(application: Application, private val weatherDao: WeatherDao) : AndroidViewModel(application) {
+class WeatherViewModel(application: Application, private val weatherDao: WeatherDao) :
+    AndroidViewModel(application) {
 
     private val weatherApi = RetrofitInstance.weatherApi
     private val _weatherResult = MutableLiveData<NetworkResponse<WeatherModel>>()
@@ -47,9 +48,9 @@ class WeatherViewModel(application: Application, private val weatherDao: Weather
                             windDeg = weatherModel.wind?.deg,
                             windGust = weatherModel.wind?.gust,
                             cloudsAll = weatherModel.clouds?.all,
-                            weatherMain = weatherModel.weather.firstOrNull()?.main,
-                            weatherDescription = weatherModel.weather.firstOrNull()?.description,
-                            weatherIcon = weatherModel.weather.firstOrNull()?.icon,
+                            weatherMain = weatherModel.weather?.main,
+                            weatherDescription = weatherModel.weather?.description,
+                            weatherIcon = weatherModel.weather?.icon,
                             name = weatherModel.name,
                             country = weatherModel.sys?.country,
                             sunrise = weatherModel.sys?.sunrise,
@@ -79,7 +80,10 @@ class WeatherViewModel(application: Application, private val weatherDao: Weather
         if (cachedWeather != null) {
             // Convert the cached WeatherEntity back to WeatherModel
             val weatherModel = WeatherModel(
-                coOrd = CoOrd(lon = cachedWeather.lon.toString(), lat = cachedWeather.lat.toString()),
+                coOrd = CoOrd(
+                    lon = cachedWeather.lon.toString(),
+                    lat = cachedWeather.lat.toString()
+                ),
                 main = Main(
                     temp = cachedWeather.temp,
                     feelsLike = cachedWeather.feelsLike,
@@ -94,12 +98,10 @@ class WeatherViewModel(application: Application, private val weatherDao: Weather
                     gust = cachedWeather.windGust
                 ),
                 clouds = Clouds(all = cachedWeather.cloudsAll),
-                weather = arrayListOf(
-                    Weather(
+                weather = Weather(
                     main = cachedWeather.weatherMain,
                     description = cachedWeather.weatherDescription,
                     icon = cachedWeather.weatherIcon
-                )
                 ),
                 name = cachedWeather.name,
                 sys = Sys(

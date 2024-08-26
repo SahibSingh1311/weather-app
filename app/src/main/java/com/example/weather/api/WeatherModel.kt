@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class WeatherModel(
     @SerializedName("coord") val coOrd: CoOrd? = CoOrd(),
-    @SerializedName("weather") val weather: ArrayList<Weather> = arrayListOf(),
+    @SerializedName("weather") val weather: Weather? = Weather(),
     @SerializedName("base") val base: String? = null,
     @SerializedName("main") val main: Main? = Main(),
     @SerializedName("visibility") val visibility: String? = null,

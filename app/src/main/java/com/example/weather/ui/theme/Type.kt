@@ -1,6 +1,7 @@
 package com.example.weather.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -14,6 +15,18 @@ val Typography = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
+    ),
+
+    displayMedium = TextStyle(
+        fontFamily = FiraSans,
+        fontWeight = FontWeight.Medium,
+        fontSize = 36.sp,
+        color = Color.White
+    ),
+    labelSmall = TextStyle(
+        fontFamily = FiraSans,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp
     )
     /* Other default text styles to override
     titleLarge = TextStyle(
